@@ -68,11 +68,17 @@ function printTable() {
       printWindow.print();
       printWindow.close(); // Close the window after print dialog is opened
   }, 500);  // Delay to ensure that the table is rendered before attempting print
-}
-
 function saveAsImage() {
-  // Use html2canvas to capture the content of the table
-  html2canvas(document.getElementById('loan-table')).then(function(canvas) {
+  // Wait until the page content is fully rendered before using html2canvas
+  html2canvas(document.getElementById('loan-table'), {
+    logging: true,  // Enable logging for debugging
+    allowTaint: true,  // Allow rendering content from cross-origin sources
+    useCORS: true, // Cross-origin support to include styles correctly
+    scrollX: 0,  // Prevent horizontal scrolling when capturing
+    scrollY: 0,  // Prevent vertical scrolling when capturing
+    x: window.pageXOffset,  // Account for current page position
+    y: window.pageYOffset   // Account for current page position
+  }).then(function(canvas) {
     // Convert the canvas to a base64 PNG image data
     var imgData = canvas.toDataURL('image/png');
     
