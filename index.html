@@ -16,10 +16,12 @@
       <label for="principal">Loan Amount (₱):</label>
       <input type="number" id="principal" placeholder="Enter loan amount">
     </div>
+
     <div class="input-group">
       <label for="rate">Monthly Interest Rate (%):</label>
       <input type="number" id="rate" placeholder="Enter monthly interest rate">
     </div>
+
     <div class="input-group">
       <label for="time">Loan Duration (months):</label>
       <input type="number" id="time" placeholder="Enter loan duration (months)">
@@ -45,9 +47,7 @@
           <th>Remaining Balance</th>
         </tr>
       </thead>
-      <tbody>
-        <tr><td colspan="5">No data available</td></tr>
-      </tbody>
+      <tbody></tbody>
     </table>
 
     <button onclick="printTable()">Print</button>
