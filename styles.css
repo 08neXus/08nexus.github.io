@@ -1,4 +1,3 @@
-/* General styling for the body and container */
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -63,133 +62,38 @@ table, th, td {
 
 th {
   background-color: #f2f2f2;
-  font-weight: bold;
-}
-
-td {
-  font-size: 14px;
 }
 
 @media (max-width: 768px) {
-  .input-group {
-    display: block;
-    margin: 15px 0;
+  .container {
+    padding: 15px;
   }
-
-  button {
-    width: auto;
-    padding: 10px 20px;
-  }
-
   table {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
-@media (max-width: 480px) {
-  h1 {
-    font-size: 18px;
-  }
-
-  h2 {
-    font-size: 16px;
-  }
-
-  table {
-    font-size: 10px;
-  }
-
-  .container {
-    width: 95%;
-    padding: 10px;
-  }
-
-  button {
-    padding: 10px 15px;
-  }
-  }
 @media print {
-  /* Ensure the body uses a consistent print layout */
   body {
     font-size: 12px;
     margin: 0;
     padding: 20px;
     width: 100%;
-    box-sizing: border-box;
   }
-
-  /* Ensure the container fits inside the page properly */
-  .container {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    background: none;
-    page-break-after: always;  /* Avoid any interruptions in the layout */
-  }
-
-  /* Hide the buttons for printing */
   button {
-    display: none !important;
-  }
-
-  /* Hide the regular heading, show the print-only heading */
-  h1 {
     display: none;
   }
-
-  /* Show the Payment Breakdown title at the top of the printed page */
   #print-header {
     font-size: 18px;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 20px;  /* Add space before the table */
+    margin-bottom: 20px;
   }
-
-  /* Table styling for printing */
   table, th, td {
     border: 1px solid black !important;
-    padding: 5px !important;
-    font-size: 12px !important;
   }
-
-  th {
-    background-color: #f2f2f2 !important;
-  }
-
-  td {
-    text-align: center;
-  }
-
-  /* Proper A4 size layout */
   @page {
     size: A4;
-    margin: 10mm;  /* Adjust margins for a tighter fit */
-  }
-
-  /* Make sure the table fits well within the page margins */
-  table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse; /* Ensure the table rows don’t overflow */
-  }
-
-  /* Remove any unnecessary extra space and set consistent row height */
-  th, td {
-    height: 20px; /* Adjust table cell height */
-  }
-
-  /* Break long rows (if needed) to ensure it doesn’t overflow */
-  table, tr {
-    page-break-inside: avoid;
-  }
-
-  /* Lower-right corner style for the date and time */
-  #date-time {
-    position: fixed;
-    bottom: 10mm;
-    right: 10mm;
-    font-size: 10px;
-    font-style: italic;
-    color: #000;
+    margin: 10mm;
   }
 }
