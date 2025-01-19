@@ -71,15 +71,22 @@ function printTable() {
 }
 
 function saveAsImage() {
+  // Use html2canvas to capture the content of the table
   html2canvas(document.getElementById('loan-table')).then(function(canvas) {
+    // Convert the canvas to a base64 PNG image data
     var imgData = canvas.toDataURL('image/png');
+    
+    // Create a temporary download link
     var link = document.createElement('a');
     link.href = imgData;
-    link.download = 'loan_payment_breakdown.png'; // Define image file name
-    document.body.appendChild(link);  // Append link to DOM (required for download)
-    link.click();  // Programmatically click the download link
-    document.body.removeChild(link);  // Remove link from DOM
-  }).catch(function (error) {
+    link.download = 'loan_payment_breakdown.png'; // Set the file name for download
+    
+    // Simulate a click on the link to trigger the download
+    document.body.appendChild(link);  // Append to the document (needed in some browsers)
+    link.click();  // Trigger the download
+    document.body.removeChild(link);  // Clean up after the download (remove the link)
+  }).catch(function(error) {
+    // Handle any errors that occur while capturing the table
     alert("Error generating image. Please try again.");
     console.error(error);
   });
