@@ -12,12 +12,6 @@ function calculateLoan() {
   // Calculate Monthly Payment
   var monthlyPayment = principal * (rate * Math.pow(1 + rate, timeInMonths)) / (Math.pow(1 + rate, timeInMonths) - 1);
 
-  // Avoid division by zero if the rate is 0
-  if (!isFinite(monthlyPayment) || isNaN(monthlyPayment)) {
-    alert("An error occurred with the loan calculation. Please check your inputs.");
-    return;
-  }
-
   // Calculate Total Loan Payment (principal + interest)
   var totalAmount = monthlyPayment * timeInMonths;
   var totalInterest = totalAmount - principal;
@@ -28,7 +22,7 @@ function calculateLoan() {
 
   // Populate the table with the breakdown of payments
   var table = document.getElementById("loan-table").getElementsByTagName('tbody')[0];
-  table.innerHTML = "";  // Clear the table before filling it with new rows
+  table.innerHTML = "";
 
   var remainingBalance = principal;
 
@@ -37,12 +31,10 @@ function calculateLoan() {
     var principalPayment = monthlyPayment - interestPayment;
     remainingBalance -= principalPayment;
 
-    // Round each value to avoid floating-point issues
     interestPayment = interestPayment.toFixed(2);
     principalPayment = principalPayment.toFixed(2);
-    remainingBalance = Math.max(remainingBalance.toFixed(2), 0); // Ensure remaining balance doesn't go negative
+    remainingBalance = remainingBalance.toFixed(2);
 
-    // Insert row into the table
     var row = table.insertRow();
     row.insertCell(0).textContent = month;
     row.insertCell(1).textContent = `₱${monthlyPayment.toFixed(2)}`;
@@ -79,16 +71,8 @@ function printTable() {
 }
 
 function saveAsImage() {
-  // Wait until the page content is fully rendered before using html2canvas
-  html2canvas(document.getElementById('loan-table'), {
-    logging: true,  // Enable logging for debugging
-    allowTaint: true,  // Allow rendering content from cross-origin sources
-    useCORS: true, // Cross-origin support to include styles correctly
-    scrollX: 0,  // Prevent horizontal scrolling when capturing
-    scrollY: 0,  // Prevent vertical scrolling when capturing
-    x: window.pageXOffset,  // Account for current page position
-    y: window.pageYOffset   // Account for current page position
-  }).then(function(canvas) {
+  // Use html2canvas to capture the content of the table
+  html2canvas(document.getElementById('loan-table')).then(function(canvas) {
     // Convert the canvas to a base64 PNG image data
     var imgData = canvas.toDataURL('image/png');
     
