@@ -107,6 +107,7 @@ td {
   button {
     padding: 10px 15px;
   }
+}
   @media print {
   table, th, td {
     border: 1px solid black !important; /* Ensure the border is included */
