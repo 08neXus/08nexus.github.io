@@ -84,3 +84,28 @@ function saveAsImage() {
     console.error('Error generating image:', error);
   }
 }
+// Function to format current date and time
+function getCurrentDateTime() {
+  const now = new Date();
+  const day = ("0" + now.getDate()).slice(-2);
+  const month = ("0" + (now.getMonth() + 1)).slice(-2); // months are zero-indexed
+  const year = now.getFullYear();
+  const hours = ("0" + now.getHours()).slice(-2);
+  const minutes = ("0" + now.getMinutes()).slice(-2);
+  const seconds = ("0" + now.getSeconds()).slice(-2);
+  return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
+}
+
+// Function to set date and time to be printed
+function setDateTimeForPrint() {
+  const dateTimeElement = document.getElementById('date-time');
+  if (dateTimeElement) {
+    dateTimeElement.textContent = getCurrentDateTime();
+  }
+}
+
+// Call the function when preparing for print
+function printTable() {
+  setDateTimeForPrint(); // Update the date and time before printing
+  window.print();
+}
