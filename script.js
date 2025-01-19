@@ -74,4 +74,16 @@ function getCurrentDateTime() {
 function setDateTimeForPrint() {
   const dateTimeElement = document.getElementById('date-time');
   if (dateTimeElement) {
-    dateTimeElement
+    dateTimeElement.textContent = getCurrentDateTime();
+  }
+}
+
+// Print table
+function printTable() {
+  setDateTimeForPrint();
+  document.querySelector('#print-header').style.display = 'block';
+
+  window.print();
+
+  document.querySelector('#print-header').style.display = 'none';
+}
