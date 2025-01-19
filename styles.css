@@ -164,7 +164,7 @@ td {
     line-height: 1.2;
   }
 
-  /* Hide non-relevant sections like buttons */
+  /* Ensure only the table and results show */
   #loan-table {
     width: 100%;
     margin-top: 20px;
