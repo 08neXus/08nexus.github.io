@@ -86,55 +86,38 @@ td {
   }
 }
 
-/* General Table Styling (for normal viewing) */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
+@media (max-width: 480px) {
+  h1 {
+    font-size: 18px;
+  }
 
-table, th, td {
-  border: 1px solid #ddd;  /* Border for normal view */
-  text-align: center;
-  padding: 8px;
-}
+  h2 {
+    font-size: 16px;
+  }
 
-th {
-  background-color: #f2f2f2;
-}
+  table {
+    font-size: 10px;
+  }
 
-td {
-  font-size: 14px;
-}
+  .container {
+    width: 95%;
+    padding: 10px;
+  }
 
-/* Styles for Printing */
+  button {
+    padding: 10px 15px;
+  }
 @media print {
-  body {
-    font-family: Arial, sans-serif; /* Set a simple font for printing */
-    color: black;
-  }
-
   table, th, td {
-    border: 1px solid black !important;  /* Ensure borders are applied in print */
-    border-collapse: collapse !important;
-    padding: 8px !important; /* Enforce consistent padding */
-    text-align: center !important;  /* Make sure text is centered */
+    border: 1px solid black !important; /* Ensure the border is included */
+    padding: 5px !important; /* Optional: Adjust the padding for print layout */
   }
-
+  
   th {
-    background-color: #f2f2f2 !important;
+    background-color: #f2f2f2 !important; /* Optional: Retain the background color in print */
   }
 
-  td {
-    background-color: white !important;  /* Ensure proper background color for td */
-  }
-
-  h1, h2, h3 {
-    text-align: center !important;  /* Center headers for better printing */
-  }
-
-  /* Optional - Set the page margins to ensure enough space for table */
-  @page {
-    margin: 20mm;
+  td, th {
+    font-size: 12px !important; /* Optional: Make the font size smaller for print */
   }
 }
