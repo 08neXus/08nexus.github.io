@@ -1,6 +1,5 @@
 // Function to calculate the loan
 function calculateLoan() {
-  remainingBalance = Math.max(remainingBalance, 0).toFixed(2);
   const principal = parseFloat(document.getElementById('principal').value);
   const rate = parseFloat(document.getElementById('rate').value) / 100;
   const time = parseInt(document.getElementById('time').value);
