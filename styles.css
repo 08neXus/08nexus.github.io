@@ -115,16 +115,19 @@ td {
     margin: 0;
     padding: 20px;
     width: 100%;
+    box-sizing: border-box;
   }
 
+  /* Ensure the container fits inside the page properly */
   .container {
     width: 100%;
+    margin: 0;
     padding: 0;
     background: none;
-    margin-bottom: 20px; /* Add space below the header */
+    page-break-after: always;  /* Avoid any interruptions in the layout */
   }
 
-  /* Remove buttons from the print */
+  /* Hide the buttons for printing */
   button {
     display: none !important;
   }
@@ -139,7 +142,7 @@ td {
     font-size: 18px;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 20px;  /* Space before the table */
+    margin-bottom: 20px;  /* Add space before the table */
   }
 
   /* Table styling for printing */
@@ -157,14 +160,26 @@ td {
     text-align: center;
   }
 
-  /* Ensure proper page size for A4 and handle breaks */
+  /* Proper A4 size layout */
   @page {
     size: A4;
-    margin: 20mm;
+    margin: 10mm;  /* Adjust margins for a tighter fit */
   }
 
-  /* Add space between the table and bottom of the page */
+  /* Make sure the table fits well within the page margins */
   table {
-    margin-bottom: 20px;
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse; /* Ensure the table rows don’t overflow */
+  }
+
+  /* Remove any unnecessary extra space and set consistent row height */
+  th, td {
+    height: 20px; /* Adjust table cell height */
+  }
+
+  /* Break long rows (if needed) to ensure it doesn’t overflow */
+  table, tr {
+    page-break-inside: avoid;
   }
 }
