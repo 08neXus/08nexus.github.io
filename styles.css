@@ -107,4 +107,17 @@ td {
   button {
     padding: 10px 15px;
   }
+  @media print {
+  table, th, td {
+    border: 1px solid black !important; /* Ensure the border is included */
+    padding: 5px !important; /* Optional: Adjust the padding for print layout */
+  }
+  
+  th {
+    background-color: #f2f2f2 !important; /* Optional: Retain the background color in print */
+  }
+
+  td, th {
+    font-size: 12px !important; /* Optional: Make the font size smaller for print */
+  }
 }
