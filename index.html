@@ -5,24 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Loan Calculator with Monthly Interest</title>
   <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-
   <div class="container">
-    <h1>Loan Calculator with Monthly Interest</h1> <!-- This is visible on screen -->
-    <h2 id="print-header" style="display:none;">Payment Breakdown</h2> <!-- This is shown only in print -->
+    <h1>Loan Calculator with Monthly Interest</h1>
+    <h2 id="print-header" style="display:none;">Payment Breakdown</h2>
     
     <div class="input-group">
       <label for="principal">Loan Amount (₱):</label>
       <input type="number" id="principal" placeholder="Enter loan amount">
     </div>
-
     <div class="input-group">
       <label for="rate">Monthly Interest Rate (%):</label>
       <input type="number" id="rate" placeholder="Enter monthly interest rate">
     </div>
-
     <div class="input-group">
       <label for="time">Loan Duration (months):</label>
       <input type="number" id="time" placeholder="Enter loan duration (months)">
@@ -32,35 +29,32 @@
     <button onclick="clearForm()">Clear</button>
 
     <h2>Results</h2>
-<div class="output">
-  <p>Total Loan Payment: ₱<span id="total-amount">0</span></p>
-  <p>Total Interest: ₱<span id="total-interest">0</span></p>
-</div>
+    <div class="output">
+      <p>Total Loan Payment: ₱<span id="total-amount">0</span></p>
+      <p>Total Interest: ₱<span id="total-interest">0</span></p>
+    </div>
 
-<!-- Payment Breakdown section with heading -->
-<h3 id="payment-breakdown-header">Payment Breakdown</h3> <!-- Add this just before the table -->
-<table id="loan-table">
-  <thead>
-    <tr>
-      <th>Month</th>
-      <th>Monthly Payment</th>
-      <th>Interest Payment</th>
-      <th>Principal Payment</th>
-      <th>Remaining Balance</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Dynamic table rows will be populated here -->
-  </tbody>
-</table>
+    <h3 id="payment-breakdown-header">Payment Breakdown</h3>
+    <table id="loan-table">
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Monthly Payment</th>
+          <th>Interest Payment</th>
+          <th>Principal Payment</th>
+          <th>Remaining Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="5">No data available</td></tr>
+      </tbody>
+    </table>
 
     <button onclick="printTable()">Print</button>
     <button onclick="saveAsImage()">Save as Image</button>
-
   </div>
 
   <script src="script.js"></script>
-  <!-- script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script-->
   <div id="date-time"></div>
 </body>
 </html>
