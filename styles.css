@@ -109,72 +109,51 @@ td {
   }
   }
 @media print {
-  /* General reset for print */
-  * {
-    margin: 0;
-    padding: 0;
-    font-size: 10px !important; /* Smaller font size for printing */
-    line-height: 1.1 !important;
-  }
-
+  /* Styling for the body when printing */
   body {
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    font-size: 12px;
   }
 
-  /* Container adjustments for a clean print layout */
   .container {
     width: 100%;
+    max-width: 100%;
     padding: 0;
-    margin: 0;
-    box-shadow: none; /* Remove shadow */
+    background: none;
   }
 
-  /* Hide unnecessary elements during printing */
-  h1, h3, button {
-    display: none;
-  }
-
-  /* Results section (Loan Amount, Interest, Duration) */
-  .output {
-    font-size: 10px !important;
+  /* Ensuring everything from the table to the total calculation is visible */
+  h2, .output, #loan-table {
+    display: block;
     margin-top: 20px;
   }
 
-  .output p {
-    margin-bottom: 10px;
-    line-height: 1.2;
-  }
-
-  /* Table style for print */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-
-  th, td {
-    font-size: 9px !important;
-    padding: 4px !important;
-    border: 1px solid black !important;
+  /* Add a header for the Payment Breakdown above the table */
+  #payment-breakdown-header {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
     text-align: center;
+  }
+
+  table, th, td {
+    border: 1px solid black !important;
+    padding: 5px !important;
+    font-size: 12px !important;
   }
 
   th {
-    background-color: #f2f2f2;
+    background-color: #f2f2f2 !important;
   }
 
-  /* Print heading for Payment Breakdown */
-  .payment-breakdown-title {
+  td {
     text-align: center;
-    font-size: 12px;
-    margin-top: 20px;
-    font-weight: bold;
   }
 
-  /* Print setup for a compact layout */
+  /* Optional: To ensure all the content fits within one page */
   @page {
-    size: A4 portrait; /* A4 size for printing */
-    margin: 10mm;
+    size: A4;
+    margin: 20mm;
   }
 }
