@@ -109,11 +109,11 @@ td {
   }
   }
 @media print {
-  /* Styling for the body when printing */
+  /* Ensure the body uses a consistent print layout */
   body {
+    font-size: 12px;
     margin: 0;
     padding: 20px;
-    font-size: 12px;
   }
 
   .container {
@@ -123,20 +123,25 @@ td {
     background: none;
   }
 
-  /* Ensuring everything from the table to the total calculation is visible */
-  h2, .output, #loan-table {
-    display: block;
-    margin-top: 20px;
+  /* Remove buttons from the print */
+  button {
+    display: none !important;
   }
 
-  /* Add a header for the Payment Breakdown above the table */
-  #payment-breakdown-header {
-    font-size: 16px;
+  /* Change the h1 text for printing only */
+  h1 {
+    display: none; /* Hide the regular heading */
+  }
+
+  /* Add a custom heading for printing, replacing the original h1 */
+  #print-header {
+    font-size: 18px;
     font-weight: bold;
-    margin-top: 20px;
     text-align: center;
+    margin-bottom: 20px;
   }
 
+  /* Table styling for printing */
   table, th, td {
     border: 1px solid black !important;
     padding: 5px !important;
@@ -151,7 +156,7 @@ td {
     text-align: center;
   }
 
-  /* Optional: To ensure all the content fits within one page */
+  /* Optional: Page breaks if content is long */
   @page {
     size: A4;
     margin: 20mm;
