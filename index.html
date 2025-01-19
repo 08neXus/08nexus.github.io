@@ -8,10 +8,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 </head>
 <body>
+
   <div class="container">
     <h1>Loan Calculator with Monthly Interest</h1>
     <h2 id="print-header" style="display:none;">Payment Breakdown</h2>
-    
+
     <div class="input-group">
       <label for="principal">Loan Amount (₱):</label>
       <input type="number" id="principal" placeholder="Enter loan amount">
@@ -47,17 +48,14 @@
           <th>Remaining Balance</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Dynamic table rows will be populated here -->
-      </tbody>
+      <tbody></tbody>
     </table>
 
     <button onclick="printTable()">Print</button>
     <button onclick="saveAsImage()">Save as Image</button>
   </div>
 
-  <div id="date-time"></div>
-
   <script src="script.js"></script>
+  <div id="date-time"></div>
 </body>
 </html>
