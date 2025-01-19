@@ -53,23 +53,6 @@ function clearForm() {
 }
 
 // Function to print the table and results
-function printTable() {
-  // Hide the regular heading and show the custom print header for Payment Breakdown
-  document.querySelector('h1').style.display = 'none';
-  document.querySelector('#print-header').style.display = 'block';
-
-  // Hide buttons during printing
-  const buttons = document.querySelectorAll('button');
-  buttons.forEach(button => button.style.display = 'none');
-
-  // Trigger the print action
-  window.print();
-
-  // Revert changes after printing
-  document.querySelector('h1').style.display = 'block';
-  document.querySelector('#print-header').style.display = 'none';
-  buttons.forEach(button => button.style.display = 'inline-block');
-}
 
 // Function to save the container content as an image
 function saveAsImage() {
@@ -107,5 +90,19 @@ function setDateTimeForPrint() {
 // Call the function when preparing for print
 function printTable() {
   setDateTimeForPrint(); // Update the date and time before printing
+  // Hide the regular heading and show the custom print header for Payment Breakdown
+  document.querySelector('h1').style.display = 'none';
+  document.querySelector('#print-header').style.display = 'block';
+
+  // Hide buttons during printing
+  const buttons = document.querySelectorAll('button');
+  buttons.forEach(button => button.style.display = 'none');
+
+  // Trigger the print action
   window.print();
+
+  // Revert changes after printing
+  document.querySelector('h1').style.display = 'block';
+  document.querySelector('#print-header').style.display = 'none';
+  buttons.forEach(button => button.style.display = 'inline-block');
 }
