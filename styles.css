@@ -114,13 +114,14 @@ td {
     font-size: 12px;
     margin: 0;
     padding: 20px;
+    width: 100%;
   }
 
   .container {
     width: 100%;
-    max-width: 100%;
     padding: 0;
     background: none;
+    margin-bottom: 20px; /* Add space below the header */
   }
 
   /* Remove buttons from the print */
@@ -128,17 +129,17 @@ td {
     display: none !important;
   }
 
-  /* Change the h1 text for printing only */
+  /* Hide the regular heading, show the print-only heading */
   h1 {
-    display: none; /* Hide the regular heading */
+    display: none;
   }
 
-  /* Add a custom heading for printing, replacing the original h1 */
+  /* Show the Payment Breakdown title at the top of the printed page */
   #print-header {
     font-size: 18px;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 20px;  /* Space before the table */
   }
 
   /* Table styling for printing */
@@ -156,9 +157,14 @@ td {
     text-align: center;
   }
 
-  /* Optional: Page breaks if content is long */
+  /* Ensure proper page size for A4 and handle breaks */
   @page {
     size: A4;
     margin: 20mm;
+  }
+
+  /* Add space between the table and bottom of the page */
+  table {
+    margin-bottom: 20px;
   }
 }
