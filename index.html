@@ -30,26 +30,27 @@
     <button onclick="clearForm()">Clear</button>
 
     <h2>Results</h2>
-    <div class="output">
-      <p>Total Loan Payment: ₱<span id="total-amount">0</span></p>
-      <p>Total Interest: ₱<span id="total-interest">0</span></p>
-    </div>
+<div class="output">
+  <p>Total Loan Payment: ₱<span id="total-amount">0</span></p>
+  <p>Total Interest: ₱<span id="total-interest">0</span></p>
+</div>
 
-    <h3>Payment Breakdown</h3>
-    <table id="loan-table">
-      <thead>
-        <tr>
-          <th>Month</th>
-          <th>Monthly Payment</th>
-          <th>Interest Payment</th>
-          <th>Principal Payment</th>
-          <th>Remaining Balance</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Dynamic table rows will be populated here -->
-      </tbody>
-    </table>
+<!-- Payment Breakdown section with heading -->
+<h3 class="payment-breakdown-title">Payment Breakdown</h3>
+<table id="loan-table">
+  <thead>
+    <tr>
+      <th>Month</th>
+      <th>Monthly Payment</th>
+      <th>Interest Payment</th>
+      <th>Principal Payment</th>
+      <th>Remaining Balance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Dynamic table rows will be populated here -->
+  </tbody>
+</table>
 
     <button onclick="printTable()">Print</button>
     <button onclick="saveAsImage()">Save as Image</button>
