@@ -68,6 +68,7 @@ function printTable() {
       printWindow.print();
       printWindow.close(); // Close the window after print dialog is opened
   }, 500);  // Delay to ensure that the table is rendered before attempting print
+}
 function saveAsImage() {
   // Wait until the page content is fully rendered before using html2canvas
   html2canvas(document.getElementById('loan-table'), {
