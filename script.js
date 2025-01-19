@@ -1,125 +1,66 @@
-/* General styling for the body and container */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  margin: 0;
-  padding: 0;
-}
+// Function to calculate the loan
+function calculateLoan() {
+  const principal = parseFloat(document.getElementById('principal').value);
+  const rate = parseFloat(document.getElementById('rate').value) / 100;
+  const time = parseInt(document.getElementById('time').value);
 
-.container {
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: white;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1, h2, h3 {
-  text-align: center;
-  color: #333;
-}
-
-input[type="number"], button {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  box-sizing: border-box;
-}
-
-input[type="number"]:focus, button:focus {
-  outline: none;
-  border-color: #4CAF50;
-}
-
-button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
-}
-
-h2, .output {
-  text-align: center;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-table, th, td {
-  border: 1px solid #ddd;
-  text-align: center;
-  padding: 8px;
-}
-
-th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-}
-
-td {
-  font-size: 14px;
-}
-
-@media (max-width: 768px) {
-  .input-group {
-    display: block;
-    margin: 15px 0;
+  if (!principal || !rate || !time) {
+    alert("Please fill in all fields");
+    return;
   }
 
-  button {
-    width: auto;
-    padding: 10px 20px;
-  }
+  const totalAmount = principal * Math.pow(1 + rate, time);
+  const totalInterest = totalAmount - principal;
 
-  table {
-    font-size: 12px;
+  document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
+  document.getElementById('total-interest').textContent = totalInterest.toFixed(2);
+
+  generatePaymentBreakdown(principal, rate, time);
+}
+
+// Function to generate the payment breakdown table
+function generatePaymentBreakdown(principal, rate, time) {
+  const tableBody = document.getElementById('loan-table').getElementsByTagName('tbody')[0];
+  tableBody.innerHTML = ''; // Clear previous rows
+
+  let remainingBalance = principal;
+  let monthlyPayment = (principal * rate * Math.pow(1 + rate, time)) / (Math.pow(1 + rate, time) - 1);
+
+  for (let month = 1; month <= time; month++) {
+    let interestPayment = remainingBalance * rate;
+    let principalPayment = monthlyPayment - interestPayment;
+    remainingBalance -= principalPayment;
+
+    let row = tableBody.insertRow();
+    row.insertCell(0).textContent = month;
+    row.insertCell(1).textContent = monthlyPayment.toFixed(2);
+    row.insertCell(2).textContent = interestPayment.toFixed(2);
+    row.insertCell(3).textContent = principalPayment.toFixed(2);
+    row.insertCell(4).textContent = remainingBalance.toFixed(2);
   }
 }
 
-@media (max-width: 480px) {
-  h1 {
-    font-size: 18px;
-  }
-
-  h2 {
-    font-size: 16px;
-  }
-
-  table {
-    font-size: 10px;
-  }
-
-  .container {
-    width: 95%;
-    padding: 10px;
-  }
-
-  button {
-    padding: 10px 15px;
-  }
+// Function to clear the form inputs and results
+function clearForm() {
+  document.getElementById('principal').value = '';
+  document.getElementById('rate').value = '';
+  document.getElementById('time').value = '';
+  document.getElementById('total-amount').textContent = '0';
+  document.getElementById('total-interest').textContent = '0';
+  document.getElementById('loan-table').getElementsByTagName('tbody')[0].innerHTML = '';
 }
 
-@media print {
-  table, th, td {
-    border: 1px solid black !important; /* Ensure the border is included */
-    padding: 5px !important; /* Optional: Adjust the padding for print layout */
-  }
+// Function to print the table and results
+function printTable() {
+  window.print();
+}
 
-  th {
-    background-color: #f2f2f2 !important; /* Optional: Retain the background color in print */
-  }
-
-  td, th {
-    font-size: 12px !important; /* Optional: Make the font size smaller for print */
-  }
+// Function to save the container content as an image
+function saveAsImage() {
+  html2canvas(document.querySelector(".container")).then(canvas => {
+    let link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = 'loan_calculator_output.png';
+    link.click();
+  });
 }
