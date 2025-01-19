@@ -34,8 +34,8 @@ function generatePaymentBreakdown(principal, rate, time, monthlyPayment) {
     let principalPayment = Math.round((monthlyPayment - interestPayment) * 100) / 100;
     remainingBalance = Math.round((remainingBalance - principalPayment) * 100) / 100;
 
-    // Handle floating-point precision issues to prevent showing -0
-    if (remainingBalance < 0 && remainingBalance > -0.01) {
+    // Prevent negative balance due to floating-point errors
+    if (remainingBalance < 0) {
       remainingBalance = 0;
     }
 
