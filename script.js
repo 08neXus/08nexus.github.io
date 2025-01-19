@@ -54,7 +54,21 @@ function clearForm() {
 
 // Function to print the table and results
 function printTable() {
+  // Hide the regular header and show the custom print header for Payment Breakdown
+  document.querySelector('h1').style.display = 'none';
+  document.querySelector('#print-header').style.display = 'block';
+
+  // Hide buttons for the print version
+  const buttons = document.querySelectorAll('button');
+  buttons.forEach(button => button.style.display = 'none');
+
+  // Trigger print
   window.print();
+
+  // Revert changes back to normal after printing
+  document.querySelector('h1').style.display = 'block';
+  document.querySelector('#print-header').style.display = 'none';
+  buttons.forEach(button => button.style.display = 'inline-block');
 }
 
 // Function to save the container content as an image
