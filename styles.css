@@ -182,4 +182,14 @@ td {
   table, tr {
     page-break-inside: avoid;
   }
+
+  /* Lower-right corner style for the date and time */
+  #date-time {
+    position: fixed;
+    bottom: 10mm;
+    right: 10mm;
+    font-size: 10px;
+    font-style: italic;
+    color: #000;
+  }
 }
