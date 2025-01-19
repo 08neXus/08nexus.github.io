@@ -122,7 +122,7 @@ td {
     padding: 0;
   }
 
-  /* Container adjustments */
+  /* Container adjustments for a clean print layout */
   .container {
     width: 100%;
     padding: 0;
@@ -133,6 +133,17 @@ td {
   /* Hide unnecessary elements during printing */
   h1, h3, button {
     display: none;
+  }
+
+  /* Results section (Loan Amount, Interest, Duration) */
+  .output {
+    font-size: 10px !important;
+    margin-top: 20px;
+  }
+
+  .output p {
+    margin-bottom: 10px;
+    line-height: 1.2;
   }
 
   /* Table style for print */
@@ -153,26 +164,17 @@ td {
     background-color: #f2f2f2;
   }
 
-  /* Results section (Loan Amount, Interest, Duration) */
-  .output {
-    font-size: 10px !important;
+  /* Print heading for Payment Breakdown */
+  .payment-breakdown-title {
+    text-align: center;
+    font-size: 12px;
     margin-top: 20px;
+    font-weight: bold;
   }
 
-  .output p {
-    margin-bottom: 10px;
-    line-height: 1.2;
-  }
-
-  /* Ensure only the table and results show */
-  #loan-table {
-    width: 100%;
-    margin-top: 20px;
-  }
-
-  /* Print page setup for a clean and compact layout */
+  /* Print setup for a compact layout */
   @page {
-    size: A4 portrait; /* Size set for printing */
+    size: A4 portrait; /* A4 size for printing */
     margin: 10mm;
   }
 }
