@@ -107,18 +107,26 @@ td {
   button {
     padding: 10px 15px;
   }
-}
-  @media print {
-  table, th, td {
-    border: 1px solid black !important; /* Ensure the border is included */
-    padding: 5px !important; /* Optional: Adjust the padding for print layout */
-  }
-  
-  th {
-    background-color: #f2f2f2 !important; /* Optional: Retain the background color in print */
+}/* Add specific styles for print media */
+@media print {
+  body {
+    font-family: Arial, sans-serif; /* Set font for printing */
+    color: black;
   }
 
-  td, th {
-    font-size: 12px !important; /* Optional: Make the font size smaller for print */
+  table, th, td {
+    border: 1px solid black !important; /* Make sure borders are set for printing */
+    border-collapse: collapse !important; /* Prevent borders from collapsing */
+    padding: 8px !important;
+    text-align: center !important;  /* Align text to center */
+  }
+
+  th {
+    background-color: #f2f2f2 !important;
+  }
+
+  td {
+    background-color: white !important;
   }
 }
+  
