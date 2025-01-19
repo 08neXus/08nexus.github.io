@@ -1,4 +1,4 @@
-// Function to calculate the loan
+// Calculate loan
 function calculateLoan() {
   const principal = parseFloat(document.getElementById('principal').value);
   const rate = parseFloat(document.getElementById('rate').value) / 100;
@@ -19,20 +19,16 @@ function calculateLoan() {
   generatePaymentBreakdown(principal, rate, time, monthlyPayment);
 }
 
+// Generate breakdown table
 function generatePaymentBreakdown(principal, rate, time, monthlyPayment) {
   const tableBody = document.getElementById('loan-table').getElementsByTagName('tbody')[0];
   tableBody.innerHTML = '';
 
   let remainingBalance = principal;
-
   for (let month = 1; month <= time; month++) {
-    let interestPayment = Math.round(remainingBalance * rate * 100) / 100;
-    let principalPayment = Math.round((monthlyPayment - interestPayment) * 100) / 100;
-    remainingBalance = Math.round((remainingBalance - principalPayment) * 100) / 100;
-
-    if (remainingBalance < 0) {
-      remainingBalance = 0;
-    }
+    let interestPayment = remainingBalance * rate;
+    let principalPayment = monthlyPayment - interestPayment;
+    remainingBalance = Math.max(0, remainingBalance - principalPayment);
 
     let row = tableBody.insertRow();
     row.insertCell(0).textContent = month;
@@ -43,6 +39,7 @@ function generatePaymentBreakdown(principal, rate, time, monthlyPayment) {
   }
 }
 
+// Clear form
 function clearForm() {
   document.getElementById('principal').value = '';
   document.getElementById('rate').value = '';
@@ -52,6 +49,7 @@ function clearForm() {
   document.getElementById('loan-table').getElementsByTagName('tbody')[0].innerHTML = '';
 }
 
+// Save table as image
 function saveAsImage() {
   html2canvas(document.querySelector(".container")).then(canvas => {
     let link = document.createElement('a');
@@ -61,6 +59,7 @@ function saveAsImage() {
   });
 }
 
+// Set current date/time
 function getCurrentDateTime() {
   const now = new Date();
   const day = ("0" + now.getDate()).slice(-2);
@@ -71,22 +70,8 @@ function getCurrentDateTime() {
   return `${month}/${day}/${year} ${hours}:${minutes}`;
 }
 
+// Set date/time for print
 function setDateTimeForPrint() {
   const dateTimeElement = document.getElementById('date-time');
-  dateTimeElement.textContent = getCurrentDateTime();
-}
-
-function printTable() {
-  setDateTimeForPrint();
-  document.querySelector('h1').style.display = 'none';
-  document.querySelector('#print-header').style.display = 'block';
-
-  const buttons = document.querySelectorAll('button');
-  buttons.forEach(button => button.style.display = 'none');
-
-  window.print();
-
-  document.querySelector('h1').style.display = 'block';
-  document.querySelector('#print-header').style.display = 'none';
-  buttons.forEach(button => button.style.display = 'inline-block');
-}
+  if (dateTimeElement) {
+    dateTimeElement
