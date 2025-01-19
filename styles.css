@@ -26,7 +26,6 @@ input[type="number"], button {
   margin: 8px 0;
   font-size: 16px;
   border: 1px solid #ddd;
-  box-sizing: border-box;
 }
 
 input[type="number"]:focus, button:focus {
@@ -66,6 +65,10 @@ th {
   font-weight: bold;
 }
 
+td {
+  font-size: 14px;
+}
+
 @media print {
   body {
     font-size: 12px;
@@ -79,7 +82,7 @@ th {
   }
 
   button {
-    display: none;
+    display: none !important;
   }
 
   h1 {
