@@ -12,6 +12,12 @@ function calculateLoan() {
   // Calculate Monthly Payment
   var monthlyPayment = principal * (rate * Math.pow(1 + rate, timeInMonths)) / (Math.pow(1 + rate, timeInMonths) - 1);
 
+  // Avoid division by zero if the rate is 0
+  if (!isFinite(monthlyPayment) || isNaN(monthlyPayment)) {
+    alert("An error occurred with the loan calculation. Please check your inputs.");
+    return;
+  }
+
   // Calculate Total Loan Payment (principal + interest)
   var totalAmount = monthlyPayment * timeInMonths;
   var totalInterest = totalAmount - principal;
@@ -22,7 +28,7 @@ function calculateLoan() {
 
   // Populate the table with the breakdown of payments
   var table = document.getElementById("loan-table").getElementsByTagName('tbody')[0];
-  table.innerHTML = "";
+  table.innerHTML = "";  // Clear the table before filling it with new rows
 
   var remainingBalance = principal;
 
@@ -31,10 +37,12 @@ function calculateLoan() {
     var principalPayment = monthlyPayment - interestPayment;
     remainingBalance -= principalPayment;
 
+    // Round each value to avoid floating-point issues
     interestPayment = interestPayment.toFixed(2);
     principalPayment = principalPayment.toFixed(2);
-    remainingBalance = remainingBalance.toFixed(2);
+    remainingBalance = Math.max(remainingBalance.toFixed(2), 0); // Ensure remaining balance doesn't go negative
 
+    // Insert row into the table
     var row = table.insertRow();
     row.insertCell(0).textContent = month;
     row.insertCell(1).textContent = `₱${monthlyPayment.toFixed(2)}`;
@@ -69,6 +77,7 @@ function printTable() {
       printWindow.close(); // Close the window after print dialog is opened
   }, 500);  // Delay to ensure that the table is rendered before attempting print
 }
+
 function saveAsImage() {
   // Wait until the page content is fully rendered before using html2canvas
   html2canvas(document.getElementById('loan-table'), {
