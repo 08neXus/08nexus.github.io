@@ -51,11 +51,22 @@ function clearForm() {
 
 // Save table as image
 function saveAsImage() {
-  html2canvas(document.querySelector(".container")).then(canvas => {
-    let link = document.createElement('a');
-    link.href = canvas.toDataURL('image/png');
-    link.download = 'loan_calculator_output.png';
-    link.click();
+  const container = document.querySelector(".container");
+
+  if (!container) {
+    console.error("Container element not found!");
+    return;
+  }
+
+  html2canvas(container, { useCORS: true }).then(canvas => {
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png'); // Generates the image as a base64-encoded PNG
+    link.download = 'loan_calculator_output.png'; // Filename for download
+    document.body.appendChild(link); // Append link to the document
+    link.click(); // Simulate a click to trigger the download
+    document.body.removeChild(link); // Remove the link from the DOM
+  }).catch(error => {
+    console.error("Failed to capture the screenshot: ", error);
   });
 }
 
