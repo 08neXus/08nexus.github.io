@@ -4,12 +4,18 @@ function calculateLoan() {
   const rate = parseFloat(document.getElementById('rate').value) / 100;
   const time = parseInt(document.getElementById('time').value);
 
-  if (isNaN(principal) || principal <= 0 || isNaN(rate) || rate <= 0 || isNaN(time) || time <= 0) {
-    alert("Please fill in all fields with valid positive numbers.");
+  if (isNaN(principal) || principal <= 0 || isNaN(rate) || rate < 0 || isNaN(time) || time <= 0) {
+    alert("Please fill in all fields with valid numbers. Interest rate can be 0%.");
     return;
   }
 
-  let monthlyPayment = (principal * rate * Math.pow(1 + rate, time)) / (Math.pow(1 + rate, time) - 1);
+  let monthlyPayment;
+  if (rate === 0) {
+    monthlyPayment = principal / time;
+  } else {
+    monthlyPayment = (principal * rate * Math.pow(1 + rate, time)) / (Math.pow(1 + rate, time) - 1);
+  }
+
   const totalAmount = monthlyPayment * time;
   const totalInterest = totalAmount - principal;
 
@@ -26,7 +32,7 @@ function generatePaymentBreakdown(principal, rate, time, monthlyPayment) {
 
   let remainingBalance = principal;
   for (let month = 1; month <= time; month++) {
-    let interestPayment = remainingBalance * rate;
+    let interestPayment = rate === 0 ? 0 : remainingBalance * rate;
     let principalPayment = monthlyPayment - interestPayment;
     remainingBalance = Math.max(0, remainingBalance - principalPayment);
 
@@ -60,11 +66,11 @@ function saveAsImage() {
 
   html2canvas(container, { useCORS: true }).then(canvas => {
     const link = document.createElement('a');
-    link.href = canvas.toDataURL('image/png'); // Generates the image as a base64-encoded PNG
-    link.download = 'loan_calculator_output.png'; // Filename for download
-    document.body.appendChild(link); // Append link to the document
-    link.click(); // Simulate a click to trigger the download
-    document.body.removeChild(link); // Remove the link from the DOM
+    link.href = canvas.toDataURL('image/png');
+    link.download = 'loan_calculator_output.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }).catch(error => {
     console.error("Failed to capture the screenshot: ", error);
   });
