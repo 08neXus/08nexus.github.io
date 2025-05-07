@@ -1,31 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loan Calculator with Monthly Interest</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loan Calculator</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
   <div class="container">
-    <h1>Loan Calculator with Monthly Interest</h1>
-    <h2 id="print-header" style="display:none;">Payment Breakdown</h2>
+    <h1>Loan Calculator</h1>
 
     <div class="input-group">
       <label for="principal">Loan Amount (₱):</label>
-      <input type="number" id="principal" placeholder="Enter loan amount">
+      <input type="number" id="principal" />
     </div>
 
     <div class="input-group">
       <label for="rate">Monthly Interest Rate (%):</label>
-      <input type="number" id="rate" placeholder="Enter monthly interest rate">
+      <input type="number" id="rate" />
     </div>
 
     <div class="input-group">
       <label for="time">Loan Duration (months):</label>
-      <input type="number" id="time" placeholder="Enter loan duration (months)">
+      <input type="number" id="time" />
+    </div>
+
+    <div class="input-group">
+      <label for="type">Interest Type:</label>
+      <select id="type">
+        <option value="compound" selected>Compound Interest (Default)</option>
+        <option value="simple">Simple Interest</option>
+        <option value="fixed">Fixed Interest</option>
+        <option value="amortized">Amortized Interest</option>
+      </select>
     </div>
 
     <button onclick="calculateLoan()">Calculate</button>
@@ -33,11 +40,11 @@
 
     <h2>Results</h2>
     <div class="output">
-      <p>Total Loan Payment: ₱<span id="total-amount">0</span></p>
-      <p>Total Interest: ₱<span id="total-interest">0</span></p>
+      <p>Total Loan Payment: ₱<span id="total-amount">0.00</span></p>
+      <p>Total Interest: ₱<span id="total-interest">0.00</span></p>
     </div>
 
-    <h3 id="payment-breakdown-header">Payment Breakdown</h3>
+    <h3>Payment Breakdown</h3>
     <table id="loan-table">
       <thead>
         <tr>
@@ -50,12 +57,8 @@
       </thead>
       <tbody></tbody>
     </table>
-
-    <button onclick="printTable()">Print</button>
-    <button onclick="saveAsImage()">Save as Image</button>
   </div>
 
   <script src="script.js"></script>
-  <div id="date-time"></div>
 </body>
 </html>
