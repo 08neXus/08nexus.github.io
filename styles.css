@@ -1,4 +1,3 @@
-/* General styling */
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -14,150 +13,65 @@ body {
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }
 
 h1, h2, h3 {
   text-align: center;
   color: #333;
-  margin: 0;
 }
 
-input[type="number"], button {
+.input-group {
+  margin: 10px 0;
+}
+
+label, input, select {
+  display: block;
   width: 100%;
-  padding: 10px;
-  margin: 8px 0;
   font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 10px;
+  margin-top: 5px;
   box-sizing: border-box;
 }
 
-input[type="number"]:focus, button:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+input, select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
   background-color: #4CAF50;
   color: white;
   border: none;
-  cursor: pointer;
   border-radius: 4px;
-  transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 button:hover {
   background-color: #45a049;
 }
 
-h2, .output {
+.output {
   text-align: center;
+  font-size: 18px;
+  margin-top: 20px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  font-size: 14px;
 }
 
-table, th, td {
+th, td {
   border: 1px solid #ddd;
-  text-align: center;
   padding: 8px;
+  text-align: center;
 }
 
 th {
   background-color: #f2f2f2;
-  font-weight: bold;
-}
-
-@media print {
-  body {
-    font-size: 12px;
-    margin: 0;
-    padding: 20px;
-  }
-
-  .container {
-    background: none;
-    box-shadow: none;
-    page-break-after: always;
-  }
-
-  button {
-    display: none !important;
-  }
-
-  h1 {
-    display: none;
-  }
-
-  #print-header {
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  table, th, td {
-    border: 1px solid black !important;
-    padding: 5px !important;
-    font-size: 12px;
-  }
-
-  @page {
-    size: A4;
-    margin: 10mm;
-  }
-
-  #date-time {
-    position: fixed;
-    bottom: 10mm;
-    right: 10mm;
-    font-size: 10px;
-    font-style: italic;
-    color: black;
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .container {
-    padding: 15px;
-  }
-
-  h1, h2, h3 {
-    font-size: 18px;
-  }
-
-  input[type="number"], button {
-    font-size: 14px;
-    padding: 8px;
-  }
-
-  table, th, td {
-    font-size: 12px;
-    padding: 5px;
-  }
-}
-
-@media (max-width: 480px) {
-  h1, h2, h3 {
-    font-size: 16px;
-  }
-
-  input[type="number"], button {
-    font-size: 12px;
-    padding: 6px;
-  }
-
-  table, th, td {
-    font-size: 10px;
-    padding: 4px;
-  }
 }
