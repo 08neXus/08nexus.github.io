@@ -1,106 +1,75 @@
-// Calculate loan
 function calculateLoan() {
   const principal = parseFloat(document.getElementById('principal').value);
   const rate = parseFloat(document.getElementById('rate').value) / 100;
   const time = parseInt(document.getElementById('time').value);
+  const type = document.getElementById('type').value;
 
-  if (isNaN(principal) || principal <= 0 || isNaN(rate) || rate < 0 || isNaN(time) || time <= 0) {
-    alert("Please fill in all fields with valid numbers. Interest rate can be 0%.");
+  if (isNaN(principal) || principal <= 0 || isNaN(rate) || isNaN(time) || time <= 0) {
+    alert("Please fill in all fields with valid numbers.");
     return;
   }
 
-  let monthlyPayment;
-  if (rate === 0) {
-    monthlyPayment = principal / time;
-  } else {
-    monthlyPayment = (principal * rate * Math.pow(1 + rate, time)) / (Math.pow(1 + rate, time) - 1);
-  }
-
-  const totalAmount = monthlyPayment * time;
-  const totalInterest = totalAmount - principal;
-
-  document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
-  document.getElementById('total-interest').textContent = totalInterest.toFixed(2);
-
-  generatePaymentBreakdown(principal, rate, time, monthlyPayment);
-}
-
-// Generate breakdown table
-function generatePaymentBreakdown(principal, rate, time, monthlyPayment) {
-  const tableBody = document.getElementById('loan-table').getElementsByTagName('tbody')[0];
+  let monthlyPayment, totalAmount, totalInterest;
+  const tableBody = document.querySelector("#loan-table tbody");
   tableBody.innerHTML = '';
+  let balance = principal;
 
-  let remainingBalance = principal;
-  for (let month = 1; month <= time; month++) {
-    let interestPayment = rate === 0 ? 0 : remainingBalance * rate;
-    let principalPayment = monthlyPayment - interestPayment;
-    remainingBalance = Math.max(0, remainingBalance - principalPayment);
+  if (type === "compound") {
+    monthlyPayment = (principal * rate * Math.pow(1 + rate, time)) / (Math.pow(1 + rate, time) - 1);
+  } else if (type === "simple") {
+    totalInterest = principal * rate * time;
+    totalAmount = principal + totalInterest;
+    monthlyPayment = totalAmount / time;
+  } else if (type === "fixed") {
+    totalInterest = principal * rate;
+    totalAmount = principal + totalInterest;
+    monthlyPayment = totalAmount / time;
+  } else if (type === "amortized") {
+    monthlyPayment = (principal * rate) / (1 - Math.pow(1 + rate, -time));
+  }
 
-    let row = tableBody.insertRow();
-    row.insertCell(0).textContent = month;
-    row.insertCell(1).textContent = monthlyPayment.toFixed(2);
-    row.insertCell(2).textContent = interestPayment.toFixed(2);
-    row.insertCell(3).textContent = principalPayment.toFixed(2);
-    row.insertCell(4).textContent = remainingBalance.toFixed(2);
+  if (type === "simple" || type === "fixed") {
+    for (let i = 1; i <= time; i++) {
+      const interestPayment = (type === "simple") ? principal * rate : totalInterest / time;
+      const principalPayment = monthlyPayment - interestPayment;
+      balance -= principalPayment;
+      addRow(i, monthlyPayment, interestPayment, principalPayment, Math.max(0, balance));
+    }
+    document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
+    document.getElementById('total-interest').textContent = totalInterest.toFixed(2);
+  } else {
+    totalAmount = monthlyPayment * time;
+    totalInterest = totalAmount - principal;
+
+    for (let i = 1; i <= time; i++) {
+      const interestPayment = balance * rate;
+      const principalPayment = monthlyPayment - interestPayment;
+      balance -= principalPayment;
+      addRow(i, monthlyPayment, interestPayment, principalPayment, Math.max(0, balance));
+    }
+
+    document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
+    document.getElementById('total-interest').textContent = totalInterest.toFixed(2);
   }
 }
 
-// Clear form
+function addRow(month, payment, interest, principal, balance) {
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td>${month}</td>
+    <td>${payment.toFixed(2)}</td>
+    <td>${interest.toFixed(2)}</td>
+    <td>${principal.toFixed(2)}</td>
+    <td>${balance.toFixed(2)}</td>
+  `;
+  document.querySelector("#loan-table tbody").appendChild(row);
+}
+
 function clearForm() {
   document.getElementById('principal').value = '';
   document.getElementById('rate').value = '';
   document.getElementById('time').value = '';
-  document.getElementById('total-amount').textContent = '0';
-  document.getElementById('total-interest').textContent = '0';
-  document.getElementById('loan-table').getElementsByTagName('tbody')[0].innerHTML = '';
-}
-
-// Save table as image
-function saveAsImage() {
-  const container = document.querySelector(".container");
-
-  if (!container) {
-    console.error("Container element not found!");
-    return;
-  }
-
-  html2canvas(container, { useCORS: true }).then(canvas => {
-    const link = document.createElement('a');
-    link.href = canvas.toDataURL('image/png');
-    link.download = 'loan_calculator_output.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }).catch(error => {
-    console.error("Failed to capture the screenshot: ", error);
-  });
-}
-
-// Set current date/time
-function getCurrentDateTime() {
-  const now = new Date();
-  const day = ("0" + now.getDate()).slice(-2);
-  const month = ("0" + (now.getMonth() + 1)).slice(-2);
-  const year = now.getFullYear();
-  const hours = ("0" + now.getHours()).slice(-2);
-  const minutes = ("0" + now.getMinutes()).slice(-2);
-  return `${month}/${day}/${year} ${hours}:${minutes}`;
-}
-
-// Set date/time for print
-function setDateTimeForPrint() {
-  const dateTimeElement = document.getElementById('date-time');
-  if (dateTimeElement) {
-    dateTimeElement.textContent = getCurrentDateTime();
-  }
-}
-
-// Print table
-function printTable() {
-  setDateTimeForPrint();
-  document.querySelector('#print-header').style.display = 'block';
-
-  window.print();
-
-  document.querySelector('#print-header').style.display = 'none';
+  document.getElementById('total-amount').textContent = '0.00';
+  document.getElementById('total-interest').textContent = '0.00';
+  document.querySelector("#loan-table tbody").innerHTML = '';
 }
