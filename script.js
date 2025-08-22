@@ -1,3 +1,10 @@
+function setComputation(title, eq, sub, notes = "") {
+  document.getElementById("formula-title").textContent = title;
+  document.getElementById("formula-eq").textContent = eq;
+  document.getElementById("formula-sub").textContent = sub;
+  document.getElementById("formula-notes").textContent = notes;
+}
+
 function calculateLoan() {
   const principal = parseFloat(document.getElementById('principal').value);
   const rate = parseFloat(document.getElementById('rate').value) / 100;
@@ -51,6 +58,51 @@ function calculateLoan() {
     document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
     document.getElementById('total-interest').textContent = totalInterest.toFixed(2);
   }
+
+  // === Formula Explanations ===
+  const P = principal;
+  const r = rate;
+  const t = time;
+
+  if (type === "compound") {
+    setComputation(
+      "Compound Interest (Annuity Formula)",
+      "M = P · r · (1 + r)^t / ((1 + r)^t − 1)\nTotal Amount = M · t\nTotal Interest = Total Amount − P",
+      `M = ${P} · ${r.toFixed(6)} · (1 + ${r.toFixed(6)})^${t} / ((1 + ${r.toFixed(6)})^${t} − 1)\n` +
+      `M = ${monthlyPayment.toFixed(2)} per month\n` +
+      `Total Amount = ${monthlyPayment.toFixed(2)} × ${t} = ${totalAmount.toFixed(2)}\n` +
+      `Total Interest = ${totalAmount.toFixed(2)} − ${P.toFixed(2)} = ${totalInterest.toFixed(2)}`,
+      "Note: Uses monthly interest rate r and duration t."
+    );
+  } else if (type === "simple") {
+    setComputation(
+      "Simple Interest",
+      "Interest = P · r · t\nTotal Amount = P + Interest\nMonthly Payment = Total Amount / t",
+      `Interest = ${P} · ${r.toFixed(6)} · ${t} = ${totalInterest.toFixed(2)}\n` +
+      `Total Amount = ${P.toFixed(2)} + ${totalInterest.toFixed(2)} = ${totalAmount.toFixed(2)}\n` +
+      `Monthly Payment = ${totalAmount.toFixed(2)} / ${t} = ${monthlyPayment.toFixed(2)}`,
+      "Note: Interest is based only on original principal."
+    );
+  } else if (type === "fixed") {
+    setComputation(
+      "Fixed Interest",
+      "Total Interest = P · r\nTotal Amount = P + Interest\nMonthly Payment = Total Amount / t",
+      `Interest = ${P} · ${r.toFixed(6)} = ${totalInterest.toFixed(2)}\n` +
+      `Total Amount = ${P.toFixed(2)} + ${totalInterest.toFixed(2)} = ${totalAmount.toFixed(2)}\n` +
+      `Monthly Payment = ${totalAmount.toFixed(2)} / ${t} = ${monthlyPayment.toFixed(2)}`,
+      "Note: A flat interest charge applied once, spread over time."
+    );
+  } else if (type === "amortized") {
+    setComputation(
+      "Amortized Loan",
+      "M = (P · r) / (1 − (1 + r)^−t)\nTotal Amount = M · t\nTotal Interest = Total Amount − P",
+      `M = (${P} · ${r.toFixed(6)}) / (1 − (1 + ${r.toFixed(6)})^−${t})\n` +
+      `M = ${monthlyPayment.toFixed(2)} per month\n` +
+      `Total Amount = ${monthlyPayment.toFixed(2)} × ${t} = ${totalAmount.toFixed(2)}\n` +
+      `Total Interest = ${totalAmount.toFixed(2)} − ${P.toFixed(2)} = ${totalInterest.toFixed(2)}`,
+      "Note: Classic amortization with a constant monthly rate r."
+    );
+  }
 }
 
 function addRow(month, payment, interest, principal, balance) {
@@ -72,4 +124,9 @@ function clearForm() {
   document.getElementById('total-amount').textContent = '0.00';
   document.getElementById('total-interest').textContent = '0.00';
   document.querySelector("#loan-table tbody").innerHTML = '';
+
+  document.getElementById("formula-title").textContent = '';
+  document.getElementById("formula-eq").textContent = '';
+  document.getElementById("formula-sub").textContent = '';
+  document.getElementById("formula-notes").textContent = '';
 }
