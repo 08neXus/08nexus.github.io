@@ -114,3 +114,9 @@ th {
     padding: 10px;
   }
 }
+.error-message {
+  color: red;
+  font-size: 13px;
+  margin-top: 4px;
+  height: 14px;
+}
