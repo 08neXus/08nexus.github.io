@@ -12,17 +12,20 @@
 
     <div class="input-group">
       <label for="principal">Loan Amount (₱):</label>
-      <input type="number" id="principal" />
+      <input type="number" id="principal" placeholder="Enter amount" />
+      <small class="error-message" id="principal-error"></small>
     </div>
 
     <div class="input-group">
       <label for="rate">Monthly Interest Rate (%):</label>
-      <input type="number" id="rate" />
+      <input type="number" id="rate" placeholder="Enter monthly interest" />
+      <small class="error-message" id="rate-error"></small>
     </div>
 
     <div class="input-group">
       <label for="time">Loan Duration (months):</label>
-      <input type="number" id="time" />
+      <input type="number" id="time" placeholder="Enter number of months" />
+      <small class="error-message" id="time-error"></small>
     </div>
 
     <div class="input-group">
@@ -44,7 +47,6 @@
       <p>Total Interest: ₱<span id="total-interest">0.00</span></p>
     </div>
 
-    <!-- NEW Computation Details -->
     <h2>Computation Details</h2>
     <div id="computation" class="output">
       <p id="formula-title" style="font-weight:600;"></p>
