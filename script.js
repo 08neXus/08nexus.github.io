@@ -1,3 +1,12 @@
+function showError(id, message) {
+  document.getElementById(id).textContent = message;
+}
+
+function clearErrors() {
+  const errors = document.querySelectorAll('.error-message');
+  errors.forEach(e => e.textContent = '');
+}
+
 function setComputation(title, eq, sub, notes = "") {
   document.getElementById("formula-title").textContent = title;
   document.getElementById("formula-eq").textContent = eq;
@@ -6,15 +15,29 @@ function setComputation(title, eq, sub, notes = "") {
 }
 
 function calculateLoan() {
+  clearErrors();
+
   const principal = parseFloat(document.getElementById('principal').value);
   const rate = parseFloat(document.getElementById('rate').value) / 100;
   const time = parseInt(document.getElementById('time').value);
   const type = document.getElementById('type').value;
 
-  if (isNaN(principal) || principal <= 0 || isNaN(rate) || isNaN(time) || time <= 0) {
-    alert("Please fill in all fields with valid numbers.");
-    return;
+  let valid = true;
+
+  if (isNaN(principal) || principal <= 0) {
+    showError('principal-error', 'Please enter a valid amount greater than 0.');
+    valid = false;
   }
+  if (isNaN(rate) || rate < 0) {
+    showError('rate-error', 'Please enter a valid interest rate.');
+    valid = false;
+  }
+  if (isNaN(time) || time <= 0) {
+    showError('time-error', 'Please enter loan duration greater than 0 months.');
+    valid = false;
+  }
+
+  if (!valid) return;
 
   let monthlyPayment, totalAmount, totalInterest;
   const tableBody = document.querySelector("#loan-table tbody");
@@ -124,9 +147,9 @@ function clearForm() {
   document.getElementById('total-amount').textContent = '0.00';
   document.getElementById('total-interest').textContent = '0.00';
   document.querySelector("#loan-table tbody").innerHTML = '';
-
   document.getElementById("formula-title").textContent = '';
   document.getElementById("formula-eq").textContent = '';
   document.getElementById("formula-sub").textContent = '';
   document.getElementById("formula-notes").textContent = '';
+  clearErrors();
 }
