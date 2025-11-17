@@ -79,7 +79,25 @@ th {
   background-color: #f2f2f2;
 }
 
-/* Responsive Design */
+.error-message {
+  color: red;
+  font-size: 13px;
+  margin-top: 4px;
+  height: 14px;
+}
+
+/* Footer Copyright */
+.footer-credit {
+  position: fixed;
+  bottom: 10px;
+  right: 15px;
+  font-size: 12px;
+  color: #555;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .container {
     padding: 15px;
@@ -113,19 +131,4 @@ th {
   .container {
     padding: 10px;
   }
-}
-.error-message {
-  color: red;
-  font-size: 13px;
-  margin-top: 4px;
-  height: 14px;
-}
-.footer-credit {
-  position: fixed;
-  bottom: 10px;
-  right: 15px;
-  font-size: 12px;
-  color: #555;
-  opacity: 0.7;
-  pointer-events: none; /* so it doesn't interfere with clicks */
 }
