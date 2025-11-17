@@ -88,28 +88,28 @@ th {
 
 /* Footer Copyright */
 .footer-credit {
-  position: fixed;
-  bottom: 14px;            /* bigger bottom margin */
-  right: 18px;             /* bigger right margin */
+  position: absolute;       /* floats with content, not fixed */
+  bottom: 14px;             /* distance from bottom */
+  right: 18px;              /* distance from right */
   font-size: 10px;
-  color: #777;             /* lighter color */
-  font-family: "Courier New", Courier, monospace; /* developer-style font */
+  color: #777;              /* lighter color */
+  font-family: "Courier New", Courier, monospace;
   font-weight: normal;
-  opacity: 0;              /* start invisible for fade-in */
-  pointer-events: none;    
-  text-shadow: 0 0 2px rgba(255,255,255,0.4); /* subtle glow */
-  animation: fadeInPulse 2s ease-in-out forwards; /* fade + pulse */
-  transition: all 0.3s ease-in-out; /* smooth hover effect */
+  opacity: 0.5;             /* semi-transparent watermark */
+  text-shadow: 0 0 2px rgba(255,255,255,0.3);
+  pointer-events: none;     /* won’t interfere with clicks */
+  animation: floatWatermark 4s ease-in-out infinite;
+  transition: all 0.3s ease-in-out;
 }
 
-/* Combined fade-in + subtle pulse animation */
-@keyframes fadeInPulse {
-  0% { opacity: 0; transform: translateY(5px); }
-  50% { opacity: 0.6; transform: translateY(0px); }
-  100% { opacity: 0.6; transform: translateY(0px); }
+/* Smooth floating animation */
+@keyframes floatWatermark {
+  0% { transform: translateY(0px); opacity: 0.5; }
+  50% { transform: translateY(-4px); opacity: 0.6; }
+  100% { transform: translateY(0px); opacity: 0.5; }
 }
 
-/* Optional hover glow effect if mouse is over footer */
+/* Hover glow effect (optional) */
 .footer-credit:hover {
   color: #fff;
   text-shadow: 0 0 5px rgba(255,255,255,0.8);
