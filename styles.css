@@ -89,11 +89,12 @@ th {
 /* Footer Copyright */
 .footer-credit {
   position: fixed;
-  bottom: 10px;
-  right: 15px;
-  font-size: 12px;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
   color: #555;
-  opacity: 0.7;
+  opacity: 0.6;
   pointer-events: none;
 }
 
