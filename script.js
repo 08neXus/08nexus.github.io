@@ -1,155 +1,254 @@
-function showError(id, message) {
-  document.getElementById(id).textContent = message;
+/* Suggested monthly interest (%) by term */
+const suggested = { 0:0, 3:1.5, 6:2, 9:2.5, 12:3, 24:4 };
+
+/* Elements */
+const priceEl = document.getElementById('price');
+const termEl = document.getElementById('term');
+const interestTypeEl = document.getElementById('interestType');
+const customToggleEl = document.getElementById('customToggle');
+const customInterestEl = document.getElementById('customInterest');
+
+const downToggleEl = document.getElementById('downToggle');
+const downPaymentEl = document.getElementById('downPayment');
+
+const calcBtn = document.getElementById('calcBtn');
+const clearBtn = document.getElementById('clearBtn');
+const breakdownTbody = document.querySelector('#breakdown tbody');
+const toast = document.getElementById('toast');
+const summaryCard = document.getElementById('summaryCard');
+const principalVal = document.getElementById('principalVal');
+const totalInterestVal = document.getElementById('totalInterestVal');
+const monthlyVal = document.getElementById('monthlyVal');
+
+const totalAfterRow = document.getElementById('totalAfterRow');
+const totalAfterVal = document.getElementById('totalAfterVal');
+
+const matrixBtn = document.getElementById('matrixBtn');
+const matrixModal = document.getElementById('matrixModal');
+const closeMatrix = document.getElementById('closeMatrix');
+
+/* Init states */
+customInterestEl.disabled = true;
+downPaymentEl.disabled = true;
+
+/* Auto rate */
+function updateAutoRate(){
+  if (!customToggleEl.checked){
+    const t = parseInt(termEl.value,10);
+    customInterestEl.value = suggested[t].toFixed(2);
+  }
+}
+termEl.addEventListener('change', updateAutoRate);
+updateAutoRate();
+
+/* Toggle custom interest */
+customToggleEl.addEventListener('change', () => {
+  customInterestEl.disabled = !customToggleEl.checked;
+  if (!customToggleEl.checked) updateAutoRate();
+});
+
+/* Toggle downpayment */
+downToggleEl.addEventListener('change', () => {
+  downPaymentEl.disabled = !downToggleEl.checked;
+  if (!downToggleEl.checked) downPaymentEl.value = '';
+});
+
+/* Toast */
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(()=> toast.classList.remove('show'), 2400);
 }
 
-function clearErrors() {
-  const errors = document.querySelectorAll('.error-message');
-  errors.forEach(e => e.textContent = '');
+/* Format currency */
+function toPHP(n){
+  return Number(n).toLocaleString('en-PH', { style:'currency', currency:'PHP' });
 }
 
-function setComputation(title, eq, sub, notes = "") {
-  document.getElementById("formula-title").textContent = title;
-  document.getElementById("formula-eq").textContent = eq;
-  document.getElementById("formula-sub").textContent = sub;
-  document.getElementById("formula-notes").textContent = notes;
+/* Build table row */
+function row(i,begBal,interestAmt,principalAmt,endBal){
+  return `<tr>
+    <td>${i}</td>
+    <td>${toPHP(begBal)}</td>
+    <td>${toPHP(interestAmt)}</td>
+    <td>${toPHP(principalAmt)}</td>
+    <td>${toPHP(endBal)}</td>
+  </tr>`;
 }
 
-function calculateLoan() {
-  clearErrors();
-
-  const principal = parseFloat(document.getElementById('principal').value);
-  const rate = parseFloat(document.getElementById('rate').value) / 100;
-  const time = parseInt(document.getElementById('time').value);
-  const type = document.getElementById('type').value;
-
-  let valid = true;
-
-  if (isNaN(principal) || principal <= 0) {
-    showError('principal-error', 'Please enter a valid amount greater than 0.');
-    valid = false;
-  }
-  if (isNaN(rate) || rate < 0) {
-    showError('rate-error', 'Please enter a valid interest rate.');
-    valid = false;
-  }
-  if (isNaN(time) || time <= 0) {
-    showError('time-error', 'Please enter loan duration greater than 0 months.');
-    valid = false;
+/* Calculate */
+calcBtn.addEventListener('click', () => {
+  let originalPrice = parseFloat(priceEl.value);
+  if (isNaN(originalPrice) || originalPrice <= 0){
+    alert('Enter a valid item price');
+    return;
   }
 
-  if (!valid) return;
+  const term = parseInt(termEl.value,10);
+  const interestType = interestTypeEl.value;
 
-  let monthlyPayment, totalAmount, totalInterest;
-  const tableBody = document.querySelector("#loan-table tbody");
-  tableBody.innerHTML = '';
-  let balance = principal;
-
-  if (type === "compound") {
-    monthlyPayment = (principal * rate * Math.pow(1 + rate, time)) / (Math.pow(1 + rate, time) - 1);
-  } else if (type === "simple") {
-    totalInterest = principal * rate * time;
-    totalAmount = principal + totalInterest;
-    monthlyPayment = totalAmount / time;
-  } else if (type === "fixed") {
-    totalInterest = principal * rate;
-    totalAmount = principal + totalInterest;
-    monthlyPayment = totalAmount / time;
-  } else if (type === "amortized") {
-    monthlyPayment = (principal * rate) / (1 - Math.pow(1 + rate, -time));
-  }
-
-  if (type === "simple" || type === "fixed") {
-    for (let i = 1; i <= time; i++) {
-      const interestPayment = (type === "simple") ? principal * rate : totalInterest / time;
-      const principalPayment = monthlyPayment - interestPayment;
-      balance -= principalPayment;
-      addRow(i, monthlyPayment, interestPayment, principalPayment, Math.max(0, balance));
+  /* Downpayment */
+  let downAmt = 0;
+  if (downToggleEl.checked){
+    downAmt = parseFloat(downPaymentEl.value);
+    if (isNaN(downAmt) || downAmt < 0){
+      alert('Enter a valid downpayment');
+      return;
     }
-    document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
-    document.getElementById('total-interest').textContent = totalInterest.toFixed(2);
+    if (downAmt >= originalPrice){
+      alert('Downpayment must be less than item price');
+      return;
+    }
+  }
+
+  /* Determine interest rate */
+  let ratePct;
+  if (customToggleEl.checked){
+    ratePct = parseFloat(customInterestEl.value);
+    if (isNaN(ratePct) || ratePct < 0){
+      alert('Enter a valid custom interest %');
+      return;
+    }
   } else {
-    totalAmount = monthlyPayment * time;
-    totalInterest = totalAmount - principal;
+    ratePct = suggested[term];
+  }
 
-    for (let i = 1; i <= time; i++) {
-      const interestPayment = balance * rate;
-      const principalPayment = monthlyPayment - interestPayment;
-      balance -= principalPayment;
-      addRow(i, monthlyPayment, interestPayment, principalPayment, Math.max(0, balance));
+  const r = ratePct / 100;
+  const principal = originalPrice - downAmt;
+
+  breakdownTbody.innerHTML = '';
+  let monthlyPayment = 0;
+  let totalInterest = 0;
+
+  /* FULL PAYMENT OPTION — TERM = 0 */
+  if (term === 0){
+    breakdownTbody.insertAdjacentHTML('beforeend',
+      row(1, principal, 0, principal, 0)
+    );
+
+    monthlyPayment = principal;
+    totalInterest = 0;
+
+    summaryCard.classList.remove('hidden');
+    totalAfterRow.classList.remove('hidden');
+    principalVal.textContent = toPHP(principal);
+    totalInterestVal.textContent = toPHP(0);
+    monthlyVal.textContent = toPHP(principal);
+    totalAfterVal.textContent = toPHP(principal);
+
+    showToast('Calculation done');
+    return;
+  }
+
+  /* SIMPLE (ADD-ON) */
+  if (interestType === 'simple'){
+    totalInterest = principal * r * term;
+    monthlyPayment = (principal + totalInterest) / term;
+    const monthlyPrincipal = principal / term;
+    const monthlyInterest = totalInterest / term;
+
+    for (let i=1;i<=term;i++){
+      const beginning = +(principal - monthlyPrincipal*(i-1));
+      const endBal = +(principal - monthlyPrincipal*i).toFixed(2);
+      breakdownTbody.insertAdjacentHTML('beforeend',
+        row(i, beginning, monthlyInterest, monthlyPrincipal, Math.max(endBal,0))
+      );
     }
 
-    document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
-    document.getElementById('total-interest').textContent = totalInterest.toFixed(2);
+  /* AMORTIZED */
+  } else if (interestType === 'amortized'){
+    monthlyPayment = r===0 ? principal/term : (principal*r)/(1-Math.pow(1+r,-term));
+    let remaining = principal;
+    for (let i=1;i<=term;i++){
+      const interest = +(remaining * r);
+      const principalPaid = +(monthlyPayment - interest);
+      const endBal = +(remaining - principalPaid);
+      breakdownTbody.insertAdjacentHTML('beforeend',
+        row(i, remaining, interest, principalPaid, Math.max(endBal,0))
+      );
+      remaining = endBal;
+      totalInterest += interest;
+    }
+
+  /* FIXED */
+  } else if (interestType === 'fixed'){
+    const interestAmt = principal * r;
+    const monthlyPrincipal = principal / term;
+    monthlyPayment = monthlyPrincipal + interestAmt;
+    totalInterest = interestAmt * term;
+    let balRem = principal;
+
+    for (let i=1;i<=term;i++){
+      const beginning = balRem;
+      balRem -= monthlyPrincipal;
+      breakdownTbody.insertAdjacentHTML('beforeend',
+        row(i, beginning, interestAmt, monthlyPrincipal, Math.max(balRem,0))
+      );
+    }
+
+  /* COMPOUND */
+  } else if (interestType === 'compound'){
+    let bal = principal;
+    monthlyPayment = principal / term;
+
+    for (let i=1;i<=term;i++){
+      const interest = +(bal * r);
+      const principalPaid = monthlyPayment;
+      const endBal = +(bal + interest - principalPaid);
+
+      breakdownTbody.insertAdjacentHTML('beforeend',
+        row(i, bal, interest, principalPaid, Math.max(endBal,0))
+      );
+
+      totalInterest += interest;
+      bal = endBal;
+    }
   }
 
-  // === Formula Explanations ===
-  const P = principal;
-  const r = rate;
-  const t = time;
+  /* SUMMARY OUTPUT */
+  summaryCard.classList.remove('hidden');
+  totalAfterRow.classList.remove('hidden');
 
-  if (type === "compound") {
-    setComputation(
-      "Compound Interest (Annuity Formula)",
-      "M = P · r · (1 + r)^t / ((1 + r)^t − 1)\nTotal Amount = M · t\nTotal Interest = Total Amount − P",
-      `M = ${P} · ${r.toFixed(6)} · (1 + ${r.toFixed(6)})^${t} / ((1 + ${r.toFixed(6)})^${t} − 1)\n` +
-      `M = ${monthlyPayment.toFixed(2)} per month\n` +
-      `Total Amount = ${monthlyPayment.toFixed(2)} × ${t} = ${totalAmount.toFixed(2)}\n` +
-      `Total Interest = ${totalAmount.toFixed(2)} − ${P.toFixed(2)} = ${totalInterest.toFixed(2)}`,
-      "Note: Uses monthly interest rate r and duration t."
-    );
-  } else if (type === "simple") {
-    setComputation(
-      "Simple Interest",
-      "Interest = P · r · t\nTotal Amount = P + Interest\nMonthly Payment = Total Amount / t",
-      `Interest = ${P} · ${r.toFixed(6)} · ${t} = ${totalInterest.toFixed(2)}\n` +
-      `Total Amount = ${P.toFixed(2)} + ${totalInterest.toFixed(2)} = ${totalAmount.toFixed(2)}\n` +
-      `Monthly Payment = ${totalAmount.toFixed(2)} / ${t} = ${monthlyPayment.toFixed(2)}`,
-      "Note: Interest is based only on original principal."
-    );
-  } else if (type === "fixed") {
-    setComputation(
-      "Fixed Interest",
-      "Total Interest = P · r\nTotal Amount = P + Interest\nMonthly Payment = Total Amount / t",
-      `Interest = ${P} · ${r.toFixed(6)} = ${totalInterest.toFixed(2)}\n` +
-      `Total Amount = ${P.toFixed(2)} + ${totalInterest.toFixed(2)} = ${totalAmount.toFixed(2)}\n` +
-      `Monthly Payment = ${totalAmount.toFixed(2)} / ${t} = ${monthlyPayment.toFixed(2)}`,
-      "Note: A flat interest charge applied once, spread over time."
-    );
-  } else if (type === "amortized") {
-    setComputation(
-      "Amortized Loan",
-      "M = (P · r) / (1 − (1 + r)^−t)\nTotal Amount = M · t\nTotal Interest = Total Amount − P",
-      `M = (${P} · ${r.toFixed(6)}) / (1 − (1 + ${r.toFixed(6)})^−${t})\n` +
-      `M = ${monthlyPayment.toFixed(2)} per month\n` +
-      `Total Amount = ${monthlyPayment.toFixed(2)} × ${t} = ${totalAmount.toFixed(2)}\n` +
-      `Total Interest = ${totalAmount.toFixed(2)} − ${P.toFixed(2)} = ${totalInterest.toFixed(2)}`,
-      "Note: Classic amortization with a constant monthly rate r."
-    );
-  }
-}
+  principalVal.textContent = toPHP(principal);
+  totalInterestVal.textContent = toPHP(totalInterest);
+  monthlyVal.textContent = toPHP(monthlyPayment);
 
-function addRow(month, payment, interest, principal, balance) {
-  const row = document.createElement('tr');
-  row.innerHTML = `
-    <td>${month}</td>
-    <td>${payment.toFixed(2)}</td>
-    <td>${interest.toFixed(2)}</td>
-    <td>${principal.toFixed(2)}</td>
-    <td>${balance.toFixed(2)}</td>
-  `;
-  document.querySelector("#loan-table tbody").appendChild(row);
-}
+  const totalAfter = principal + totalInterest;
+  totalAfterVal.textContent = toPHP(totalAfter);
 
-function clearForm() {
-  document.getElementById('principal').value = '';
-  document.getElementById('rate').value = '';
-  document.getElementById('time').value = '';
-  document.getElementById('total-amount').textContent = '0.00';
-  document.getElementById('total-interest').textContent = '0.00';
-  document.querySelector("#loan-table tbody").innerHTML = '';
-  document.getElementById("formula-title").textContent = '';
-  document.getElementById("formula-eq").textContent = '';
-  document.getElementById("formula-sub").textContent = '';
-  document.getElementById("formula-notes").textContent = '';
-  clearErrors();
-}
+  showToast('Calculation done');
+});
+
+/* CLEAR */
+clearBtn.addEventListener('click', ()=>{
+  priceEl.value='';
+  downToggleEl.checked=false;
+  downPaymentEl.value='';
+  downPaymentEl.disabled=true;
+
+  customToggleEl.checked=false;
+  customInterestEl.value='';
+  customInterestEl.disabled=true;
+
+  breakdownTbody.innerHTML='';
+  summaryCard.classList.add('hidden');
+  totalAfterRow.classList.add('hidden');
+
+  principalVal.textContent='—';
+  totalInterestVal.textContent='—';
+  monthlyVal.textContent='—';
+  totalAfterVal.textContent='—';
+
+  showToast('Cleared');
+});
+
+/* MATRIX MODAL */
+matrixBtn.addEventListener('click', ()=> {
+  matrixModal.classList.add('active');
+});
+closeMatrix.addEventListener('click', ()=> {
+  matrixModal.classList.remove('active');
+});
+matrixModal.addEventListener('click', (e) => {
+  if (e.target === matrixModal) matrixModal.classList.remove('active');
+});
